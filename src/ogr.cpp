@@ -19,7 +19,7 @@ list cpp_read_ogr_stream(std::string dsn, sexp stream_xptr) {
 
   GDALDataset* poDS = GDALDataset::Open(dsn.c_str());
   if (poDS == nullptr) {
-    stop("Failed to open dataset '%s'", dsn);
+    stop("Failed to open dataset '%s'", dsn.c_str());
   }
 
   external_pointer<GDALDataset> dataset_xptr(poDS);

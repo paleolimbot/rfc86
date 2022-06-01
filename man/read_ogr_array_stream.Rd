@@ -4,6 +4,7 @@
 \alias{read_ogr_array_stream}
 \alias{read_ogr_table}
 \alias{read_ogr_df}
+\alias{read_ogr_sf}
 \title{Read OGR using the Columnar API}
 \usage{
 read_ogr_array_stream(dsn)
@@ -11,6 +12,8 @@ read_ogr_array_stream(dsn)
 read_ogr_table(dsn)
 
 read_ogr_df(dsn)
+
+read_ogr_sf(dsn)
 }
 \arguments{
 \item{dsn}{A GDAL datsource name}

@@ -17,6 +17,9 @@ Imports:
     geoarrow,
     narrow,
     tibble
+Remotes:
+    paleolimbot/narrow,
+    paleolimbot/geoarrow
 Suggests: 
     arrow,
     sf,

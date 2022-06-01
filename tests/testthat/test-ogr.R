@@ -35,3 +35,11 @@ test_that("read_ogr_df() works", {
   expect_s3_class(df, "tbl_df")
   expect_s3_class(df$geom, "geoarrow_vctr")
 })
+
+test_that("read_ogr_sf() works", {
+  file <- system.file("extdata/nc.gpkg", package = "rfc86")
+  df <- read_ogr_sf(file)
+  expect_s3_class(df, "sf")
+  expect_s3_class(df$geom, "sfc")
+  expect_true(sf::st_crs(df) != sf::NA_crs_)
+})

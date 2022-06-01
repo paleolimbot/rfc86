@@ -2,5 +2,6 @@
 
 export(read_ogr_array_stream)
 export(read_ogr_df)
+export(read_ogr_sf)
 export(read_ogr_table)
 useDynLib(rfc86, .registration = TRUE)

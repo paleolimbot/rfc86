@@ -53,3 +53,9 @@ read_ogr_table <- function(dsn) {
 read_ogr_df <- function(dsn) {
   tibble::as_tibble(read_ogr_table(dsn))
 }
+
+#' @rdname read_ogr_array_stream
+#' @export
+read_ogr_sf <- function(dsn) {
+  geoarrow::geoarrow_collect_sf(read_ogr_table(dsn))
+}
