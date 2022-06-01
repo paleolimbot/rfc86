@@ -41,18 +41,27 @@ library(geoarrow)
 library(sf)
 library(vapour)
 
-curl::curl_download(
-  "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.parquet",
-  "nshn_water_line.parquet"
-)
-
-curl::curl_download(
-  "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.gpkg",
-  "nshn_water_line.gpkg"
-)
+if (!file.exists("nshn_water_line.parquet")) {
+  curl::curl_download(
+    "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.parquet",
+    "nshn_water_line.parquet"
+  )
+  
+  curl::curl_download(
+    "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.gpkg",
+    "nshn_water_line.gpkg"
+  )
+  
+  system("ogr2ogr nshn_water_line.fgb nshn_water_line.gpkg")
+}
 
 system.time(read_ogr_table("nshn_water_line.gpkg"))
+system.time(read_ogr_table("nshn_water_line.fgb"))
 system.time(read_ogr_sf("nshn_water_line.gpkg"))
-system.time(sf::read_sf("nshn_water_line.gpkg"))
+system.time(read_sf("nshn_water_line.gpkg"))
+system.time({
+  vapour_read_attributes("nshn_water_line.gpkg")
+  vapour_read_geometry("nshn_water_line.gpkg")
+})
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
 ```

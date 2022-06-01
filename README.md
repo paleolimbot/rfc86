@@ -34,26 +34,39 @@ library(sf)
 #> Linking to GEOS 3.8.0, GDAL 3.6.0dev-b3e1f326f8, PROJ 6.3.1; sf_use_s2() is TRUE
 library(vapour)
 
-curl::curl_download(
-  "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.parquet",
-  "nshn_water_line.parquet"
-)
-
-curl::curl_download(
-  "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.gpkg",
-  "nshn_water_line.gpkg"
-)
+if (!file.exists("nshn_water_line.parquet")) {
+  curl::curl_download(
+    "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.parquet",
+    "nshn_water_line.parquet"
+  )
+  
+  curl::curl_download(
+    "https://github.com/paleolimbot/geoarrow-data/releases/download/v0.0.1/nshn_water_line.gpkg",
+    "nshn_water_line.gpkg"
+  )
+  
+  system("ogr2ogr nshn_water_line.fgb nshn_water_line.gpkg")
+}
 
 system.time(read_ogr_table("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>   7.721   0.318   8.039
+#>   7.464   0.388   7.852
+system.time(read_ogr_table("nshn_water_line.fgb"))
+#>    user  system elapsed 
+#>   3.683   0.440   4.123
 system.time(read_ogr_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>  10.066   0.552  10.614
-system.time(sf::read_sf("nshn_water_line.gpkg"))
+#>   9.738   0.531  10.265
+system.time(read_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>  18.900   0.694  19.595
+#>  18.913   0.609  19.523
+system.time({
+  vapour_read_attributes("nshn_water_line.gpkg")
+  vapour_read_geometry("nshn_water_line.gpkg")
+})
+#>    user  system elapsed 
+#>  14.089   0.464  14.552
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
 #>    user  system elapsed 
-#>   2.190   0.589   2.549
+#>   2.182   0.583   2.519
 ```
