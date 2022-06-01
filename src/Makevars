@@ -1,0 +1,2 @@
+PKG_CPPFLAGS=-I/usr/local/include
+PKG_LIBS=-L/usr/local/lib -lgdal -lodbcinst -lssl -lcrypto -llzma -larmadillo -lqhull_r -lgeotiff -ltiff -lzstd -ljpeg -lpoppler -lpng -lgif -lnetcdf -lcfitsio -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lpthread -lsz -lcurl -lwebp -ldfalt -lmfhdfalt -lz -lopenjp2 -lkmlbase -lkmldom -lkmlengine -lfyba -lfygm -lfyut -lpcre2-8 -lspatialite -lsqlite3 -lxerces-c -lmysqlclient -lpq -lodbc -lfreexl -L/home/dewey/.r-arrow-dev-build/dist/lib -larrow -ldl -logdi -lexpat -lxml2 -lgeos_c -lproj -ljson-c -pthread -lstdc++ -lm
