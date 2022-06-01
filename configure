@@ -1,7 +1,7 @@
 
-GDAL_CONFIG_FLAGS=`gdal-config --cflags`
-GDAL_CONFIG_LIBS=`gdal-config --libs`
-GDAL_CONFIG_DEP_LIBS=`gdal-config --dep-libs`
+GDAL_CONFIG_FLAGS=`/usr/local/bin/gdal-config --cflags`
+GDAL_CONFIG_LIBS=`/usr/local/bin/gdal-config --libs`
+GDAL_CONFIG_DEP_LIBS=`/usr/local/bin/gdal-config --dep-libs`
 
 PKG_CFLAGS="$GDAL_CONFIG_FLAGS"
 PKG_LIBS="$GDAL_CONFIG_LIBS $GDAL_CONFIG_DEP_LIBS"
