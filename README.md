@@ -31,7 +31,7 @@ This is a basic example which shows you how to solve a common problem:
 library(rfc86)
 library(geoarrow)
 library(sf)
-#> Linking to GEOS 3.8.0, GDAL 3.6.0dev-b3e1f326f8, PROJ 6.3.1; sf_use_s2() is TRUE
+#> Linking to GEOS 3.8.0, GDAL 3.6.0dev-8143054ca0, PROJ 6.3.1; sf_use_s2() is TRUE
 library(vapour)
 
 if (!file.exists("nshn_water_line.parquet")) {
@@ -50,23 +50,42 @@ if (!file.exists("nshn_water_line.parquet")) {
 
 system.time(read_ogr_table("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>   7.464   0.388   7.852
+#>   2.130   0.520   2.652
 system.time(read_ogr_table("nshn_water_line.fgb"))
 #>    user  system elapsed 
-#>   3.683   0.440   4.123
+#>   3.827   0.412   4.239
 system.time(read_ogr_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>   9.738   0.531  10.265
+#>   4.564   0.561   5.123
 system.time(read_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>  18.913   0.609  19.523
+#>  18.782   0.727  19.523
 system.time({
   vapour_read_attributes("nshn_water_line.gpkg")
   vapour_read_geometry("nshn_water_line.gpkg")
 })
 #>    user  system elapsed 
-#>  14.089   0.464  14.552
+#>  13.719   0.444  14.164
+
+system.time(read_ogr_table("nshn_water_line.parquet"))
+#>    user  system elapsed 
+#>   2.221   0.456   2.704
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
 #>    user  system elapsed 
-#>   2.182   0.583   2.519
+#>   2.242   0.986   4.212
+```
+
+``` r
+# validate the output
+table <- read_ogr_table("nshn_water_line.fgb")
+table$ValidateFull()
+#> [1] TRUE
+
+table <- read_ogr_table("nshn_water_line.gpkg")
+table$ValidateFull()
+#> [1] TRUE
+
+table <- read_ogr_table("nshn_water_line.parquet")
+table$ValidateFull()
+#> [1] TRUE
 ```

@@ -63,5 +63,19 @@ system.time({
   vapour_read_attributes("nshn_water_line.gpkg")
   vapour_read_geometry("nshn_water_line.gpkg")
 })
+
+system.time(read_ogr_table("nshn_water_line.parquet"))
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
+```
+
+```{r}
+# validate the output
+table <- read_ogr_table("nshn_water_line.fgb")
+table$ValidateFull()
+
+table <- read_ogr_table("nshn_water_line.gpkg")
+table$ValidateFull()
+
+table <- read_ogr_table("nshn_water_line.parquet")
+table$ValidateFull()
 ```
