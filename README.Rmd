@@ -39,7 +39,6 @@ This is a basic example which shows you how to solve a common problem:
 library(rfc86)
 library(geoarrow)
 library(sf)
-library(vapour)
 
 if (!file.exists("nshn_water_line.parquet")) {
   curl::curl_download(
@@ -59,10 +58,6 @@ system.time(read_ogr_table("nshn_water_line.gpkg"))
 system.time(read_ogr_table("nshn_water_line.fgb"))
 system.time(read_ogr_sf("nshn_water_line.gpkg"))
 system.time(read_sf("nshn_water_line.gpkg"))
-system.time({
-  vapour_read_attributes("nshn_water_line.gpkg")
-  vapour_read_geometry("nshn_water_line.gpkg")
-})
 
 system.time(read_ogr_table("nshn_water_line.parquet"))
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
@@ -79,3 +74,22 @@ table$ValidateFull()
 table <- read_ogr_table("nshn_water_line.parquet")
 table$ValidateFull()
 ```
+
+Files from https://github.com/paleolimbot/geoarrow-data/
+
+```{r, eval=FALSE}
+files <- list.files("../geoarrow-public-data/release-files", full.names = TRUE)
+for (f in files) {
+  message(sprintf("Checking '%s'...", basename(f)), appendLF = FALSE)
+  table <- read_ogr_table(f)
+  message(sprintf("%s...", table$ValidateFull()), appendLF = FALSE)
+  
+  tf <- tempfile(fileext = ".feather")
+  arrow::write_feather(table, tf)
+  table <- read_ogr_table(tf)
+  message(sprintf("feather: %s", table$ValidateFull()))
+  unlink(tf)
+}
+```
+
+(All files pass individually but I can get a crash if I try to read them all sequentially)

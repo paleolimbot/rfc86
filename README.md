@@ -32,7 +32,6 @@ library(rfc86)
 library(geoarrow)
 library(sf)
 #> Linking to GEOS 3.8.0, GDAL 3.6.0dev-8143054ca0, PROJ 6.3.1; sf_use_s2() is TRUE
-library(vapour)
 
 if (!file.exists("nshn_water_line.parquet")) {
   curl::curl_download(
@@ -50,29 +49,23 @@ if (!file.exists("nshn_water_line.parquet")) {
 
 system.time(read_ogr_table("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>   2.130   0.520   2.652
+#>   2.201   0.465   2.667
 system.time(read_ogr_table("nshn_water_line.fgb"))
 #>    user  system elapsed 
-#>   3.827   0.412   4.239
+#>   3.810   0.428   4.238
 system.time(read_ogr_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>   4.564   0.561   5.123
+#>   4.567   0.564   5.129
 system.time(read_sf("nshn_water_line.gpkg"))
 #>    user  system elapsed 
-#>  18.782   0.727  19.523
-system.time({
-  vapour_read_attributes("nshn_water_line.gpkg")
-  vapour_read_geometry("nshn_water_line.gpkg")
-})
-#>    user  system elapsed 
-#>  13.719   0.444  14.164
+#>  18.528   0.684  19.212
 
 system.time(read_ogr_table("nshn_water_line.parquet"))
 #>    user  system elapsed 
-#>   2.221   0.456   2.704
+#>   2.226   0.400   2.643
 system.time(arrow::read_parquet("nshn_water_line.parquet"))
 #>    user  system elapsed 
-#>   2.242   0.986   4.212
+#>   2.135   0.605   2.503
 ```
 
 ``` r
@@ -89,3 +82,23 @@ table <- read_ogr_table("nshn_water_line.parquet")
 table$ValidateFull()
 #> [1] TRUE
 ```
+
+Files from <https://github.com/paleolimbot/geoarrow-data/>
+
+``` r
+files <- list.files("../geoarrow-public-data/release-files", full.names = TRUE)
+for (f in files) {
+  message(sprintf("Checking '%s'...", basename(f)), appendLF = FALSE)
+  table <- read_ogr_table(f)
+  message(sprintf("%s...", table$ValidateFull()), appendLF = FALSE)
+  
+  tf <- tempfile(fileext = ".feather")
+  arrow::write_feather(table, tf)
+  table <- read_ogr_table(tf)
+  message(sprintf("feather: %s", table$ValidateFull()))
+  unlink(tf)
+}
+```
+
+(All files pass individually but I can get a crash if I try to read them
+all sequentially)
